@@ -42,12 +42,6 @@ export function VideoPlayer({ videoUrl, title, onClose, onProgress, initialTime 
         onProgress(video.currentTime, video.duration);
       }
     };
-    // New interval for tracking progress
-    const progressInterval = setInterval(() => {
-      if (video && isPlaying && onProgress) {
-        onProgress(video.currentTime, duration);
-      }
-    }, 2000); // every 2 seconds
 
     const handlePlay = () => setIsPlaying(true);
     const handlePause = () => setIsPlaying(false);
@@ -58,13 +52,12 @@ export function VideoPlayer({ videoUrl, title, onClose, onProgress, initialTime 
     video.addEventListener('pause', handlePause);
 
     return () => {
-      clearInterval(progressInterval); // Clear interval on cleanup
       video.removeEventListener('loadedmetadata', handleLoadedMetadata);
       video.removeEventListener('timeupdate', handleTimeUpdate);
       video.removeEventListener('play', handlePlay);
       video.removeEventListener('pause', handlePause);
     };
-  }, [initialTime, onProgress, duration, isPlaying]);
+  }, [initialTime, onProgress]);
 
   const togglePlay = () => {
     const video = videoRef.current;
